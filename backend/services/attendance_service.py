@@ -167,7 +167,6 @@ class AttendanceService:
         data = []
         for i, record in enumerate(records, 1):
             data.append({
-                'id': record.id,
                 'S.No': i,
                 'Registration No': record.student.registration_no,
                 'Student Name': record.student.name,
