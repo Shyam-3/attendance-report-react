@@ -22,11 +22,13 @@ def create_app():
     app.config.from_object(Config)
     
     # Enable CORS for React dev server (default: http://localhost:5173)
-    CORS(app, resources={r"/api/*": {"origins": "*"},
-                         r"/export/*": {"origins": "*"},
-                         r"/upload": {"origins": "*"},
-                         r"/delete_record/*": {"origins": "*"},
-                         r"/clear_all_data": {"origins": "*"}})
+    CORS(app, resources={
+    r"/api/*": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
+    r"/export/*": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
+    r"/upload": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
+    r"/delete_record/*": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
+    r"/clear_all_data": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]}
+})
     
     # Initialize database
     init_db(app)
