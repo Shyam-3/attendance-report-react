@@ -135,22 +135,29 @@ class Config:
 
 2. **Import project**:
    - Click "Add New" → "Project"
-   - Select your repository
-   - Framework: **Vite**
-   - Root Directory: **frontend**
+   - Select your repository: `attendance-report-react`
 
-3. **Configure build settings**:
+3. **IMPORTANT - Configure Root Directory**:
+   - Click "Edit" next to Root Directory
+   - Set Root Directory to: **`frontend`** (not the default root!)
+   - This tells Vercel your React app is in the frontend folder
+
+4. **Configure build settings**:
+   - Framework Preset: **Vite** (should auto-detect)
    - Build Command: `npm run build`
    - Output Directory: `dist`
    - Install Command: `npm install`
 
-4. **Add environment variable**:
+5. **Add environment variable**:
+   - Click "Environment Variables"
    - Key: `VITE_API_BASE_URL`
    - Value: `https://your-app.onrender.com` (your Render backend URL)
 
-5. **Deploy**: Click "Deploy"
+6. **Deploy**: Click "Deploy"
 
-6. **Your frontend will be at**: `https://your-app.vercel.app`
+7. **Your frontend will be at**: `https://your-app.vercel.app`
+
+**Note**: A `vercel.json` file has been created in your root directory to help with this configuration.
 
 ### Step 3: Update CORS
 
