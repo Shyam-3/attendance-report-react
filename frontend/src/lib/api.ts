@@ -7,6 +7,17 @@ export interface AttendanceQuery {
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:5000';
 
+// Warn in production if API base URL falls back to localhost
+if (typeof window !== 'undefined') {
+  const isFrontendLocal = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
+  const isApiLocal = /^https?:\/\/(localhost|127\.0\.0\.1)(:\\d+)?/i.test(API_BASE);
+  if (!isFrontendLocal && isApiLocal) {
+    console.warn('[Attendance App] VITE_API_BASE_URL is not set in the deployment environment.\n' +
+      'Frontend is deployed, but API points to localhost.\n' +
+      'Set VITE_API_BASE_URL in Vercel to your backend URL (e.g., https://your-app.onrender.com).');
+  }
+}
+
 export async function fetchAttendance(params: AttendanceQuery = {}) {
   const search = new URLSearchParams();
   if (params.course) search.set('course', params.course);
