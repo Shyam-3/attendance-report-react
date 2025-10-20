@@ -21,14 +21,30 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # Enable CORS for React dev server (default: http://localhost:5173)
-    CORS(app, resources={
-    r"/api/*": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
-    r"/export/*": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
-    r"/upload": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
-    r"/delete_record/*": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]},
-    r"/clear_all_data": {"origins": ["https://your-app.vercel.app", "http://127.0.0.1:5173"]}
-})
+    # Enable CORS for frontend (local dev + Vercel deployments)
+    cors_origins = [
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:4173",
+    ]
+    
+    # Add Vercel URLs from environment
+    vercel_url = app.config.get('FRONTEND_URL', '')
+    if vercel_url and 'vercel.app' in vercel_url:
+        cors_origins.append(vercel_url)
+    
+    # Allow Vercel preview and production deployments
+    cors_origins.extend([
+        "https://attendance-report-react.vercel.app",
+        "https://attendance-report-react-*.vercel.app",
+    ])
+    
+    CORS(app, 
+         resources={r"/*": {"origins": cors_origins}},
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     
     # Initialize database
     init_db(app)
