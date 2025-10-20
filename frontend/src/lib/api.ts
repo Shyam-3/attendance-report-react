@@ -5,16 +5,21 @@ export interface AttendanceQuery {
   exclude_courses?: string[]; // array of course codes to exclude
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:5000';
+// Compute API base: prefer env var; otherwise use production fallback when not on localhost
+const frontendHost = typeof window !== 'undefined' ? window.location.hostname : '';
+const isFrontendLocal = /^(localhost|127\.0\.0\.1)$/.test(frontendHost);
+const DEFAULT_LOCAL_API = 'http://127.0.0.1:5000';
+const DEFAULT_PROD_API = 'https://attendance-tracker-0zdg.onrender.com';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? (isFrontendLocal ? DEFAULT_LOCAL_API : DEFAULT_PROD_API);
 
 // Warn in production if API base URL falls back to localhost
 if (typeof window !== 'undefined') {
-  const isFrontendLocal = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
   const isApiLocal = /^https?:\/\/(localhost|127\.0\.0\.1)(:\\d+)?/i.test(API_BASE);
   if (!isFrontendLocal && isApiLocal) {
-    console.warn('[Attendance App] VITE_API_BASE_URL is not set in the deployment environment.\n' +
-      'Frontend is deployed, but API points to localhost.\n' +
-      'Set VITE_API_BASE_URL in Vercel to your backend URL (e.g., https://your-app.onrender.com).');
+    console.warn('[Attendance App] VITE_API_BASE_URL is not set; using localhost. Set it to your backend URL.');
+  }
+  if (!isFrontendLocal && API_BASE === DEFAULT_PROD_API && !import.meta.env.VITE_API_BASE_URL) {
+    console.info('[Attendance App] Using default production API fallback:', DEFAULT_PROD_API);
   }
 }
 
