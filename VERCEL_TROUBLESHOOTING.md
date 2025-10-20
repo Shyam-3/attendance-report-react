@@ -114,16 +114,72 @@ Make sure these are set:
 - ✅ Output Directory: `dist`
 - ✅ Install Command: `npm install`
 
-### Step 3: Add Environment Variable
+### Step 3: Add Environment Variable (REQUIRED!)
 
-- Key: `VITE_API_BASE_URL`
-- Value: Your backend URL (e.g., `https://your-app.onrender.com`)
+**Without this, your frontend will try to connect to localhost and fail!**
+
+1. Go to: Project → Settings → Environment Variables
+2. Add new variable:
+   - **Key**: `VITE_API_BASE_URL`
+   - **Value**: Your backend URL (e.g., `https://your-app.onrender.com`)
+   - **Environment**: Production (and Preview if needed)
+3. Click "Save"
 
 ### Step 4: Redeploy
 
 - Go to Deployments tab
 - Click "Redeploy" on the latest deployment
 - Or push a new commit to trigger deployment
+
+---
+
+## ❌ Error: ERR_CONNECTION_REFUSED / Upload Failed
+
+### Problem:
+```
+POST http://127.0.0.1:5000/upload net::ERR_CONNECTION_REFUSED
+Upload failed. Please check file format and try again.
+```
+
+### Root Cause:
+The frontend is trying to connect to `localhost:5000` instead of your deployed backend. This happens when the `VITE_API_BASE_URL` environment variable is **not set in Vercel**.
+
+### Solution:
+
+#### 1. Deploy Your Backend First
+
+If you haven't deployed the backend yet:
+- **Render.com** (Recommended - has free tier)
+  - Sign up: https://render.com
+  - See detailed steps in `GITHUB_PAGES.md`
+  
+- **Railway** (Alternative)
+  - Sign up: https://railway.app
+
+#### 2. Set Environment Variable in Vercel
+
+1. **Go to Vercel Dashboard**: https://vercel.com/dashboard
+2. Select your project → **Settings** → **Environment Variables**
+3. Click **"Add New"**
+4. Enter:
+   - **Name**: `VITE_API_BASE_URL`
+   - **Value**: Your backend URL (e.g., `https://attendance-api.onrender.com`)
+   - **Environment**: Select **Production** (and **Preview** if you want)
+5. Click **"Save"**
+
+#### 3. Redeploy
+
+After adding the environment variable:
+1. Go to **Deployments** tab
+2. Click **"..."** on latest deployment
+3. Click **"Redeploy"**
+
+#### 4. Verify
+
+After redeployment:
+- Open browser DevTools (F12) → Network tab
+- Try uploading a file
+- Check the POST request URL - should be your backend URL, not `127.0.0.1`
 
 ---
 
