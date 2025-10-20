@@ -21,7 +21,7 @@ class Student(db.Model):
 class Course(db.Model):
     __tablename__ = 'courses'
     
-    id = db.Column(db.Integer, primary_key=True)
+    # id = db.Column(db.Integer, primary_key=True)
     course_code = db.Column(db.String(20), nullable=False, unique=True)
     course_name = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
