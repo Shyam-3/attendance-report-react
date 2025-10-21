@@ -234,8 +234,8 @@ def export_excel():
         filter_info.append(f"Search: {search}")
     # Do not include excluded courses in filter_info/filename
 
-    # Format data for export
-    data = attendance_service.format_attendance_data_for_export(records)
+    # Format data for export (exclude id from file exports)
+    data = attendance_service.format_attendance_data_for_file_export(records)
 
     # Generate Excel file with filter info
     return export_utils.generate_excel_export(data, filter_info=filter_info)

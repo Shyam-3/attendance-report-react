@@ -163,7 +163,25 @@ class AttendanceService:
     
     @staticmethod
     def format_attendance_data_for_export(records):
-        """Format attendance records for export"""
+        """Format attendance records for API/display (includes id for deletion)"""
+        data = []
+        for i, record in enumerate(records, 1):
+            data.append({
+                'id': record.id,
+                'S.No': i,
+                'Registration No': record.student.registration_no,
+                'Student Name': record.student.name,
+                'Course Code': record.course.course_code,
+                'Course Name': record.course.course_name,
+                'Attended Periods': record.attended_periods,
+                'Conducted Periods': record.conducted_periods,
+                'Attendance %': round(record.attendance_percentage, 1)
+            })
+        return data
+    
+    @staticmethod
+    def format_attendance_data_for_file_export(records):
+        """Format attendance records for file export (Excel/PDF - no id)"""
         data = []
         for i, record in enumerate(records, 1):
             data.append({
