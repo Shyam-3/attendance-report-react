@@ -23,6 +23,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
+
 export async function fetchAttendance(params: AttendanceQuery = {}) {
   const search = new URLSearchParams();
   if (params.course) search.set('course', params.course);
