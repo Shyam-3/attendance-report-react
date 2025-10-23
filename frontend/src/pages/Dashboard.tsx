@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { clearAllData, deleteRecord, exportExcel, exportPdf, fetchAttendance, fetchCourses, fetchFilteredStats, fetchStats } from '../lib/api';
+import { clearAllData, exportExcel, exportPdf, fetchAttendance, fetchCourses, fetchFilteredStats, fetchStats } from '../lib/api';
 
 interface AttendanceRow {
   id?: number;
