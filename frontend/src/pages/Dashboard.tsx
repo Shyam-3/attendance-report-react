@@ -131,16 +131,16 @@ export default function Dashboard() {
     }
   }
 
-  async function onDelete(recordId?: number) {
-    if (!recordId) {
-      alert('Missing record id.');
-      return;
-    }
-    if (!confirm('Are you sure you want to delete this record?')) return;
-    await deleteRecord(recordId);
-    await load();
-    await loadFilteredStats();
-  }
+  // async function onDelete(recordId?: number) {
+  //   if (!recordId) {
+  //     alert('Missing record id.');
+  //     return;
+  //   }
+  //   if (!confirm('Are you sure you want to delete this record?')) return;
+  //   await deleteRecord(recordId);
+  //   await load();
+  //   await loadFilteredStats();
+  // }
 
   async function onClearAll() {
     if (!confirm('This will delete ALL data. Type DELETE in the next prompt to confirm.')) return;
@@ -655,7 +655,6 @@ export default function Dashboard() {
                             <i className="fas fa-trash"></i>
                           </button>
                           </td> */}
-                          <button  onClick={() => onDelete(r.id)}></button>
                       </tr>
                     );
                   })}
