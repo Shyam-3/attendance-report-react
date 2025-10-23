@@ -223,7 +223,7 @@ class ExcelProcessor:
             return None
     
     def save_to_database(self, processed_data):
-        """Save the processed data to database"""
+        """Save the processed data to database with batched commits to reduce memory"""
         if not processed_data:
             return False
         
@@ -251,11 +251,18 @@ class ExcelProcessor:
             
             db.session.commit()  # Commit students and courses first
             
-            # Save attendance records with improved logic
-            for attendance_data in processed_data['attendance']:
+            # Save attendance records with batched commits (every 500 records)
+            BATCH_SIZE = 500
+            batch_count = 0
+            total_added = 0
+            total_updated = 0
+            total_skipped = 0
+            
+            for i, attendance_data in enumerate(processed_data['attendance']):
                 # Skip records with less than 5 conducted periods
                 if attendance_data['conducted_periods'] < 5:
                     print(f"Skipping record for {attendance_data['registration_no']} - {attendance_data['course_code']}: Only {attendance_data['conducted_periods']} classes conducted (minimum 5 required)")
+                    total_skipped += 1
                     continue
                 
                 student = Student.query.filter_by(registration_no=attendance_data['registration_no']).first()
@@ -275,8 +282,10 @@ class ExcelProcessor:
                             existing_record.attended_periods = attendance_data['attended_periods']
                             existing_record.conducted_periods = attendance_data['conducted_periods']
                             existing_record.attendance_percentage = attendance_data['attendance_percentage']
+                            total_updated += 1
                         else:
                             print(f"Skipping record for {attendance_data['registration_no']} - {attendance_data['course_code']}: Existing record has more/equal classes ({existing_record.conducted_periods} >= {attendance_data['conducted_periods']})")
+                            total_skipped += 1
                     else:
                         # Create new record
                         print(f"Adding new record for {attendance_data['registration_no']} - {attendance_data['course_code']}: {attendance_data['conducted_periods']} classes")
@@ -288,8 +297,27 @@ class ExcelProcessor:
                             attendance_percentage=attendance_data['attendance_percentage']
                         )
                         db.session.add(record)
+                        total_added += 1
+                
+                batch_count += 1
+                
+                # Commit and clear session every BATCH_SIZE records to reduce memory
+                if batch_count >= BATCH_SIZE:
+                    db.session.commit()
+                    db.session.expire_all()  # Clear session cache
+                    print(f"[Batch commit] Processed {i+1}/{len(processed_data['attendance'])} records (added: {total_added}, updated: {total_updated}, skipped: {total_skipped})")
+                    batch_count = 0
+                    
+                    # Trigger garbage collection
+                    try:
+                        import gc
+                        gc.collect()
+                    except Exception:
+                        pass
             
+            # Final commit for remaining records
             db.session.commit()
+            print(f"[Final] Total processed: added={total_added}, updated={total_updated}, skipped={total_skipped}")
             return True
             
         except Exception as e:
