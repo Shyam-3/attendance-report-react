@@ -650,11 +650,11 @@ export default function Dashboard() {
                             <span className="badge bg-success"><i className="fas fa-check me-1"></i>Good</span>
                           )}
                         </td>
-                        <td className="text-center">
-                          {/* <button className="btn btn-danger btn-sm delete-record" title="Delete this record" onClick={() => onDelete(r.id)}>
+                        {/* <td className="text-center">
+                          <button className="btn btn-danger btn-sm delete-record" title="Delete this record" onClick={() => onDelete(r.id)}>
                             <i className="fas fa-trash"></i>
-                          </button> */}
-                        </td>
+                          </button>
+                        </td> */}
                       </tr>
                     );
                   })}
