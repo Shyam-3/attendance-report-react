@@ -618,7 +618,7 @@ export default function Dashboard() {
                     <th><i className="fas fa-calendar me-1"></i>Total</th>
                     <th><i className="fas fa-percentage me-1"></i>Attendance %</th>
                     <th><i className="fas fa-flag me-1"></i>Status</th>
-                    <th className="text-center"><i className="fas fa-trash me-1"></i>Action</th>
+                    {/* <th className="text-center"><i className="fas fa-trash me-1"></i>Action</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -651,9 +651,9 @@ export default function Dashboard() {
                           )}
                         </td>
                         <td className="text-center">
-                          <button className="btn btn-danger btn-sm delete-record" title="Delete this record" onClick={() => onDelete(r.id)}>
+                          {/* <button className="btn btn-danger btn-sm delete-record" title="Delete this record" onClick={() => onDelete(r.id)}>
                             <i className="fas fa-trash"></i>
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     );

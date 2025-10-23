@@ -21,6 +21,7 @@ def create_app():
     """Application factory pattern"""
     app = Flask(__name__)
     app.config.from_object(Config)
+
     
     # Enable CORS for frontend (local dev + Vercel deployments)
     cors_origins = [
@@ -136,7 +137,7 @@ def upload_file():
             return jsonify({ 'success': False, 'error': error_msg }), 500
             
     except Exception as e:
-        app.logger.error(f"Error processing uploads: {e}")
+        print(f"Error processing uploads: {e}")
         return jsonify({ 'success': False, 'error': 'An error occurred while processing the files.' }), 500
 
 def process_excel_file_from_memory(file):
@@ -151,7 +152,7 @@ def process_excel_file_from_memory(file):
         return False
         
     except Exception as e:
-        app.logger.error(f"Error processing Excel file: {e}")
+        print(f"Error processing Excel file: {e}")
         return False
 
 @app.route('/api/attendance')
@@ -300,7 +301,7 @@ def delete_record(record_id):
         else:
             return jsonify({'success': False, 'message': 'Record not found'}), 404
     except Exception as e:
-        app.logger.error(f"Error deleting record {record_id}: {e}")
+        print(f"Error deleting record {record_id}: {e}")
         return jsonify({'success': False, 'message': 'Error deleting record'}), 500
 
 @app.route('/clear_all_data', methods=['POST'])
@@ -313,7 +314,7 @@ def clear_all_data():
         else:
             return jsonify({'success': False, 'message': 'Error clearing data'}), 500
     except Exception as e:
-        app.logger.error(f"Error clearing all data: {e}")
+        print(f"Error clearing all data: {e}")
         return jsonify({'success': False, 'message': 'Error clearing data'}), 500
 
 
