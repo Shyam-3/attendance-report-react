@@ -656,12 +656,12 @@ export default function Dashboard() {
                           </button>
                         </td> */}
                       </tr>
+            <button  onClick={() => onDelete(r.id)}></button>
                     );
                   })}
                 </tbody>
               </table>
             </div>
-            <button  onClick={() => onDelete(r.id)}></button>
           </div>
         )}
 
