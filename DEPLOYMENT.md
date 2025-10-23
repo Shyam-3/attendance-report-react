@@ -160,11 +160,44 @@ Your current `.gitignore` already protects:
 If you want to host this app online (not just GitHub):
 
 ### Backend Options:
-1. **Heroku** - Easy Python app hosting
-2. **PythonAnywhere** - Free tier for Flask apps
-3. **Railway** - Modern deployment platform
-4. **Render** - Free tier with database support
+1. **Render** - Free tier with database support (recommended)
+2. **Railway** - Modern deployment platform
+3. **Heroku** - Easy Python app hosting
+4. **PythonAnywhere** - Free tier for Flask apps
 5. **AWS EC2** - More control, requires setup
+
+### Render Start Command Configuration
+
+**⚠️ Important: Update Render Start Command for handling large uploads**
+
+**Old command (default):**
+```bash
+gunicorn app:app
+```
+
+**New command (recommended for 20-file uploads):**
+```bash
+gunicorn app:app --workers 1 --threads 1 --timeout 180
+```
+
+**What changed:**
+- `--workers 1`: Single worker to prevent memory conflicts during concurrent uploads
+- `--threads 1`: Single thread per worker for memory stability
+- `--timeout 180`: 3-minute timeout (enough for processing 20 files with 1800+ records)
+
+**How to update on Render:**
+1. Go to Render dashboard → your Flask service
+2. Click **Settings** (left sidebar)
+3. Scroll to **Build & Deploy** section
+4. Find **Start Command** field
+5. Replace with the new command above
+6. Click **Save Changes**
+7. Render will automatically redeploy
+
+**Why this is needed:**
+- Default timeout (30s) is too short for batch Excel processing
+- Multiple workers can cause out-of-memory kills on free tier
+- Single worker + batched commits keeps memory low and stable
 
 ### Frontend Options:
 1. **Vercel** - Best for React apps (recommended)
