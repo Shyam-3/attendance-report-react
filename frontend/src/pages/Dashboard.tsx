@@ -654,9 +654,9 @@ export default function Dashboard() {
                           <button className="btn btn-danger btn-sm delete-record" title="Delete this record" onClick={() => onDelete(r.id)}>
                             <i className="fas fa-trash"></i>
                           </button>
-                        </td> */}
+                          </td> */}
+                          <button  onClick={() => onDelete(r.id)}></button>
                       </tr>
-            <button  onClick={() => onDelete(r.id)}></button>
                     );
                   })}
                 </tbody>
