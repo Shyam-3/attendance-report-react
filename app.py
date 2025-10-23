@@ -7,6 +7,7 @@ import sys
 sys.dont_write_bytecode = True
 
 from flask import Flask, request, redirect, jsonify
+import gc
 from flask_cors import CORS
 
 # Import our modules
@@ -90,7 +91,8 @@ def upload_file():
     if not files or len(files) == 0 or (len(files) == 1 and files[0].filename == ''):
         return jsonify({ 'success': False, 'error': 'No files selected' }), 400
     
-    if len(files) > 21:
+    # Allow up to 20 files per request (processed sequentially to control memory)
+    if len(files) > 20:
         return jsonify({ 'success': False, 'error': 'Maximum 20 files allowed at once' }), 400
 
     processed_files = 0
@@ -110,6 +112,15 @@ def upload_file():
                     processed_files += 1
                 else:
                     errors.append(f"Failed to process: {file.filename}")
+            # Try to free memory between files
+            try:
+                file.stream.close()
+            except Exception:
+                pass
+            try:
+                gc.collect()
+            except Exception:
+                pass
             else:
                 errors.append(f"Unsupported file format: {file.filename}")
         

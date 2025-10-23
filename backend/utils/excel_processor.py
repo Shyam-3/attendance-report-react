@@ -93,7 +93,18 @@ class ExcelProcessor:
             else:
                 df = pd.read_excel(file)
             
-            return self._process_dataframe(df)
+            result = self._process_dataframe(df)
+            # Free memory used by DataFrame ASAP
+            try:
+                del df
+            except Exception:
+                pass
+            try:
+                import gc
+                gc.collect()
+            except Exception:
+                pass
+            return result
             
         except Exception as e:
             print(f"Error processing Excel file: {e}")
@@ -107,7 +118,18 @@ class ExcelProcessor:
             else:
                 df = pd.read_excel(file_path)
             
-            return self._process_dataframe(df)
+            result = self._process_dataframe(df)
+            # Free memory used by DataFrame ASAP
+            try:
+                del df
+            except Exception:
+                pass
+            try:
+                import gc
+                gc.collect()
+            except Exception:
+                pass
+            return result
             
         except Exception as e:
             print(f"Error processing Excel file: {e}")
