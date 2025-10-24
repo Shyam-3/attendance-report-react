@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { clearAllData, exportExcel, exportPdf, fetchAttendance, fetchCourses, fetchFilteredStats, fetchStats } from '../lib/api';
+import { clearAllData, deleteRecord, exportExcel, exportPdf, fetchAttendance, fetchCourses, fetchFilteredStats, fetchStats } from '../lib/api';
 
 interface AttendanceRow {
   id?: number;
@@ -131,16 +131,16 @@ export default function Dashboard() {
     }
   }
 
-  // async function onDelete(recordId?: number) {
-  //   if (!recordId) {
-  //     alert('Missing record id.');
-  //     return;
-  //   }
-  //   if (!confirm('Are you sure you want to delete this record?')) return;
-  //   await deleteRecord(recordId);
-  //   await load();
-  //   await loadFilteredStats();
-  // }
+  async function onDelete(recordId?: number) {
+    if (!recordId) {
+      alert('Missing record id.');
+      return;
+    }
+    if (!confirm('Are you sure you want to delete this record?')) return;
+    await deleteRecord(recordId);
+    await load();
+    await loadFilteredStats();
+  }
 
   async function onClearAll() {
     if (!confirm('This will delete ALL data. Type DELETE in the next prompt to confirm.')) return;
@@ -618,7 +618,7 @@ export default function Dashboard() {
                     <th><i className="fas fa-calendar me-1"></i>Total</th>
                     <th><i className="fas fa-percentage me-1"></i>Attendance %</th>
                     <th><i className="fas fa-flag me-1"></i>Status</th>
-                    {/* <th className="text-center"><i className="fas fa-trash me-1"></i>Action</th> */}
+                    <th className="text-center"><i className="fas fa-trash me-1"></i>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -650,11 +650,11 @@ export default function Dashboard() {
                             <span className="badge bg-success"><i className="fas fa-check me-1"></i>Good</span>
                           )}
                         </td>
-                        {/* <td className="text-center">
+                        <td className="text-center">
                           <button className="btn btn-danger btn-sm delete-record" title="Delete this record" onClick={() => onDelete(r.id)}>
                             <i className="fas fa-trash"></i>
                           </button>
-                          </td> */}
+                        </td>
                       </tr>
                     );
                   })}
