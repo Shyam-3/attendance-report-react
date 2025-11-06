@@ -13,7 +13,7 @@ This document provides a detailed explanation of all code files, their functions
 
 ---
 
-## Application Architecture
+## Application Architecture 
 
 The application follows a **client-server architecture** with clear separation of concerns:
 
