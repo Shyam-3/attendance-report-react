@@ -140,9 +140,9 @@ class AttendanceService:
             )
         
         return query.order_by(
+            Course.course_code.asc(),
             AttendanceRecord.attendance_percentage.asc(),
-            Student.registration_no.asc(),
-            Course.course_code.asc()
+            Student.registration_no.asc()
         ).all()
     
     @staticmethod

@@ -332,8 +332,8 @@ def internal_error(error):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        print("✅ Database initialized successfully")
-        print("🚀 Starting Attendance Management System...")
-        print("📱 Access at: http://127.0.0.1:5000")
+        # print("✅ Database initialized successfully")
+        # print("🚀 Starting Attendance Management System...")
+        # print("📱 Access at: http://127.0.0.1:5000")
     
     app.run(debug=True)
